@@ -25,4 +25,45 @@ public class ArenaTools {
         return percent > chance;
     }
 
+    public static String drawHealth(int currentHealth, int maxHealth) {
+        if (maxHealth <= 0) {
+            throw new IllegalArgumentException("Здоровье не может равняться 0 или быть меньше");
+        }
+        if (currentHealth > maxHealth) {
+            throw new IllegalArgumentException("Текущее здоровье не может быть больше максимального");
+        }
+        if (currentHealth < 0) {
+            throw new IllegalArgumentException("Здоровье не может опуститься ниже нуля");
+        }
+        StringBuilder sb = new StringBuilder();
+        int filledCells = (int) Math.ceil((double) currentHealth / maxHealth * 10);
+        for (int i = 0; i <= 9; i++) {
+            if (filledCells > i) {
+                sb.append("█");
+            } else {
+                sb.append("░");
+            }
+        }
+        sb.append(" HP: ").append(currentHealth).append("/").append(maxHealth);
+        String result = sb.toString();
+        return result;
+    }
+
+    public static int readNumber(int max) {
+        if (max < 1) {
+            throw new IllegalArgumentException("Диапазон неверен");
+        }
+        while (true) {
+            String line = scanner.nextLine();
+            try {
+                int n = Integer.parseInt(line.trim());
+                if (n >= 1 && n <= max) {
+                    return n;
+                }
+                System.out.println("Число не в диапазоне от 1 до " + max);
+            } catch (NumberFormatException e) {
+                System.out.println("Это не число, попробуйте ещё раз");
+            }
+        }
+    }
 }
