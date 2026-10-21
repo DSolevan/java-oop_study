@@ -19,7 +19,7 @@ public class ArenaTools {
 
     public static boolean isCrit(int percent) {
         if (percent > 100 || percent < 0) {
-            throw new IllegalArgumentException("Процент должен быть в диапозоне от 0 до 100 {" + percent + "}" );
+            throw new IllegalArgumentException("Процент должен быть в диапазоне от 0 до 100 {" + percent + "}" );
         }
         int chance = random.nextInt(0, 100);
         return percent > chance;
@@ -36,7 +36,7 @@ public class ArenaTools {
             throw new IllegalArgumentException("Здоровье не может опуститься ниже нуля");
         }
         StringBuilder sb = new StringBuilder();
-        int filledCells = (int) Math.ceil((double) currentHealth / maxHealth * 10);
+        int filledCells = (int) Math.ceil(currentHealth * 10.0 / maxHealth);
         for (int i = 0; i <= 9; i++) {
             if (filledCells > i) {
                 sb.append("█");
@@ -45,25 +45,45 @@ public class ArenaTools {
             }
         }
         sb.append(" HP: ").append(currentHealth).append("/").append(maxHealth);
-        String result = sb.toString();
-        return result;
+        return sb.toString();
     }
 
     public static int readNumber(int max) {
-        if (max < 1) {
-            throw new IllegalArgumentException("Диапазон неверен");
+        return readNumber(1, max);
+    }
+
+    public static int readNumber(int min, int max) {
+        if (min > max) {
+            throw new IllegalArgumentException("Диапазон неверен; минимальное не может быть больше максимального");
         }
         while (true) {
             String line = scanner.nextLine();
             try {
                 int n = Integer.parseInt(line.trim());
-                if (n >= 1 && n <= max) {
+                if (n >= min && n <= max) {
                     return n;
                 }
-                System.out.println("Число не в диапазоне от 1 до " + max);
+                System.out.println("Число не в диапазоне от " + min + " до " + max);
             } catch (NumberFormatException e) {
                 System.out.println("Это не число, попробуйте ещё раз");
             }
         }
     }
+
+    public static void printRules() {
+        System.out.println("""
+        ================== ПРАВИЛА ======================
+        1. Соберите команду из 3 героев.
+        2. Воин — крепкий, броня снижает урон.
+           Маг — сильные заклинания, тратит ману.
+           Лучник — шанс нанести двойной урон.
+        3. Герои ходят по очереди: выберите цель атаки.
+        4. Побеждает команда, у которой остались живые.
+        =================================================
+        """);
+        System.out.println("Для выхода из меню нажмите Enter: ");
+        scanner.nextLine();
+    }
+
+
 }
